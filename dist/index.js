@@ -42404,8 +42404,10 @@ const identity = __nccwpck_require__(5671);
     const resourcesClient = new resources.ResourceManagementClient(credential, subscriptionId);
   
     const name = core.getInput("name", { required: true, trimWhitespace: true });
-  
-    if(await resourcesClient.resourceGroups.checkExistence(name))
+
+    const isExistingResourceGroup = await resourcesClient.resourceGroups.checkExistence(name);
+    core.info(isExistingResourceGroup);
+    if(isExistingResourceGroup)
     {
       await resourcesClient.resourceGroups.beginDeleteAndWait(name);
       core.info(`The resource group ${name} was removed successfully.`);
