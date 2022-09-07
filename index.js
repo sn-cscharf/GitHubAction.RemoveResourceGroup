@@ -2,24 +2,25 @@ const core = require('@actions/core');
 const resources = require("@azure/arm-resources");
 const identity = require("@azure/identity");
 
-try {
-  const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
-  const credential = new identity.DefaultAzureCredential();
-  const resourcesClient = new resources.ResourceManagementClient(credential, subscriptionId);
-
-  const name = core.getInput("name", { required: true, trimWhitespace: true });
-
-  if(resourcesClient.resourceGroups.checkExistence(name))
-  {
-    resourcesClient.resourceGroups.beginDeleteAndWait(name);
-    core.info(`The resource group ${name} was removed successfully.`);
+(async () => {
+  try {
+    const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
+    const credential = new identity.DefaultAzureCredential();
+    const resourcesClient = new resources.ResourceManagementClient(credential, subscriptionId);
+  
+    const name = core.getInput("name", { required: true, trimWhitespace: true });
+  
+    if(await resourcesClient.resourceGroups.checkExistence(name))
+    {
+      await resourcesClient.resourceGroups.beginDeleteAndWait(name);
+      core.info(`The resource group ${name} was removed successfully.`);
+    }
+    else
+    {
+      core.info(`The resource group ${name} does not exist.`);
+    }
+  } 
+  catch (error) {
+    core.setFailed(error.message);
   }
-  else
-  {
-    core.info(`The resource group ${name} does not exist.`);
-  }
-
-}
-catch (error) {
-  core.setFailed(error.message);
-}
+})();
