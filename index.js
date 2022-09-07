@@ -9,10 +9,16 @@ try {
 
   const name = core.getInput("name", { required: true, trimWhitespace: true });
 
-  resourcesClient.resourceGroups.beginDeleteAndWait(name)
-  .then(
-    core.info(`The resource group ${name} was removed successfully.`)
-  );
+  if(resourcesClient.resourceGroups.checkExistence(name))
+  {
+    resourcesClient.resourceGroups.beginDeleteAndWait(name);
+    core.info(`The resource group ${name} was removed successfully.`);
+  }
+  else
+  {
+    core.info(`The resource group ${name} does not exist.`);
+  }
+
 }
 catch (error) {
   core.setFailed(error.message);
