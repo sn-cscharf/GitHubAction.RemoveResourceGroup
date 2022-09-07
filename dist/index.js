@@ -42405,14 +42405,10 @@ const identity = __nccwpck_require__(5671);
   
     const name = core.getInput("name", { required: true, trimWhitespace: true });
 
-    const isExistingResourceGroup = await resourcesClient.resourceGroups.checkExistence(name);
-    core.info(isExistingResourceGroup);
-    if(isExistingResourceGroup)
-    {
+    resourcesClient.resourceGroups.checkExistence(name).then(async () => {
       await resourcesClient.resourceGroups.beginDeleteAndWait(name);
       core.info(`The resource group ${name} was removed successfully.`);
-    }
-    else
+    });
     {
       core.info(`The resource group ${name} does not exist.`);
     }
