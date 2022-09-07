@@ -1,0 +1,9 @@
+name: 'Remove Resource Group'
+description: 'Deprovision a resource group in Azure.'
+inputs:
+  name:
+    required: true
+    description: 'The name of the resource group to remove e.g. APPNAME-RESOURCE-STAGING.'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
