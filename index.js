@@ -10,13 +10,12 @@ try {
   const name = core.getInput("name", { required: true, trimWhitespace: true });
 
   resourcesClient.resourceGroups.checkExistence(name)
-    .then(() => {
-      resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
-        core.info(`The resource group ${name} was removed successfully.`)
-      );
-    }
-    , core.info(`The resource group ${name} does not exist.`)
-    );
+    .then(result => {
+      if (result == true) {
+        resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
+          core.info(`The resource group ${name} was removed successfully.`));
+      }
+    });
 }
 catch (error) {
   core.setFailed(error.message);
