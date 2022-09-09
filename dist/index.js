@@ -42397,28 +42397,30 @@ const core = __nccwpck_require__(3722);
 const resources = __nccwpck_require__(8164);
 const identity = __nccwpck_require__(5671);
 
-try {
-  const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
-  const credential = new identity.DefaultAzureCredential();
-  const resourcesClient = new resources.ResourceManagementClient(credential, subscriptionId);
+async function removeResourceGroup() {
+  try {
+    const name = core.getInput("name", { required: true, trimWhitespace: true });
 
-  const name = core.getInput("name", { required: true, trimWhitespace: true });
+    const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
+    const credential = new identity.DefaultAzureCredential();
+    const resourcesClient = new resources.ResourceManagementClient(credential, subscriptionId);
 
-  resourcesClient.resourceGroups.checkExistence(name)
-    .then(result => {
-      if (result.body == true) {
-        resourcesClient.resourceGroups.beginDeleteAndWait(name).finally(
-          core.info(`The resource group ${name} was removed successfully.`)
-        );
-      }
-      else {
-          core.info(`The resource group ${name} does not exist.`);
-      }
-    });
+    const exists = (await resourcesClient.resourceGroups.checkExistence(name)).body;
+
+    if (exists) {
+      await resourcesClient.resourceGroups.beginDeleteAndWait(name);
+      core.info(`The resource group ${name} was removed successfully.`);
+    }
+    else {
+      core.info(`The resource group ${name} does not exist.`);
+    }
+  }
+  catch (error) {
+    core.setFailed(error.message);
+  }
 }
-catch (error) {
-  core.setFailed(error.message);
-}
+
+removeResourceGroup();
 })();
 
 module.exports = __webpack_exports__;
