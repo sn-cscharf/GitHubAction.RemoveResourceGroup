@@ -42409,6 +42409,9 @@ try {
       if (result == true) {
         resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
           core.info(`The resource group ${name} was removed successfully.`));
+        }
+        else{
+          core.warning(`The resource group ${name} does not exist.`);
       }
     });
 }

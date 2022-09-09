@@ -1,4 +1,4 @@
-# GitHub Action Create Resource Group
+# GitHub Action Remove Resource Group
 ```yml
 name: Remove Resource Group GitHub Action Example
 on:
