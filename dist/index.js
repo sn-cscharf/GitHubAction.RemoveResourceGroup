@@ -42406,10 +42406,7 @@ try {
 
   resourcesClient.resourceGroups.checkExistence(name)
     .then(result => {
-      
-      core.info(JSON.stringify(result));
-      
-      if (result == true) {
+      if (result.body == true) {
         resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
           core.info(`The resource group ${name} was removed successfully.`));
       }
