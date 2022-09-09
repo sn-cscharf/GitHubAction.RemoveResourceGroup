@@ -42407,7 +42407,7 @@ try {
   resourcesClient.resourceGroups.checkExistence(name)
     .then(result => {
       
-      core.info(result);
+      core.info(JSON.stringify(result));
       
       if (result == true) {
         resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
