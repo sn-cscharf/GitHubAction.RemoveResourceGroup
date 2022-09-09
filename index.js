@@ -12,8 +12,8 @@ try {
   resourcesClient.resourceGroups.checkExistence(name)
     .then(result => {
       if (result.body == true) {
-        resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
-          core.info(`The resource group ${name} was removed successfully.`));
+        resourcesClient.resourceGroups.beginDeleteAndWait(name);
+        core.info(`The resource group ${name} was removed successfully.`);
       }
       else {
           core.info(`The resource group ${name} does not exist.`);
