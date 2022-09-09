@@ -11,12 +11,15 @@ try {
 
   resourcesClient.resourceGroups.checkExistence(name)
     .then(result => {
+      
+      core.info(result);
+      
       if (result == true) {
         resourcesClient.resourceGroups.beginDeleteAndWait(name).then(
           core.info(`The resource group ${name} was removed successfully.`));
-        }
-        else{
-          core.warning(`The resource group ${name} does not exist.`);
+      }
+      else {
+          core.info(`The resource group ${name} does not exist.`);
       }
     });
 }
